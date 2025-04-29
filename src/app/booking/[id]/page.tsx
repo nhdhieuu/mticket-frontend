@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import {useState, useEffect, use} from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -11,9 +11,10 @@ import { Film } from "lucide-react"
 import {SeatGrid} from "@/components/SeatGrid";
 import {SelectedSeats} from "@/components/SelectedSeat";
 
-export default function BookingPage({ params }: { params: { id: string } }) {
+export default function BookingPage({ params }: { params: Promise<{ id: string }> }) {
+    const unwrappedParams = use(params)
     const router = useRouter()
-    const showtimeId = Number.parseInt(params.id)
+    const showtimeId = Number.parseInt(unwrappedParams.id)
     const showtime = showtimes.find((s) => s.id === showtimeId)
 
     const [seats, setSeats] = useState<Seat[]>([])
