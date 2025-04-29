@@ -1,0 +1,149 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { showtimes, movies, getInitialSeats } from "@/lib/data"
+import type { Seat } from "@/lib/types"
+import { Film } from "lucide-react"
+import {SeatGrid} from "@/components/SeatGrid";
+import {SelectedSeats} from "@/components/SelectedSeat";
+
+export default function BookingPage({ params }: { params: { id: string } }) {
+    const router = useRouter()
+    const showtimeId = Number.parseInt(params.id)
+    const showtime = showtimes.find((s) => s.id === showtimeId)
+
+    const [seats, setSeats] = useState<Seat[]>([])
+    const [selectedSeats, setSelectedSeats] = useState<Seat[]>([])
+
+    useEffect(() => {
+        // Initialize seats from our data
+        setSeats(getInitialSeats(showtimeId))
+    }, [showtimeId])
+
+    if (!showtime) {
+        return <div className="container mx-auto py-8">Không tìm thấy suất chiếu</div>
+    }
+
+    const movie = movies.find((m) => m.id === showtime.movieId)
+
+    if (!movie) {
+        return <div className="container mx-auto py-8">Không tìm thấy phim</div>
+    }
+
+    const handleSeatClick = (seat: Seat) => {
+        if (seat.status === "booked") return
+
+        // Toggle seat selection
+        if (seat.status === "selected") {
+            setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "available" } : s)))
+            setSelectedSeats(selectedSeats.filter((s) => s.id !== seat.id))
+        } else {
+            setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "selected" } : s)))
+            setSelectedSeats([...selectedSeats, seat])
+        }
+    }
+
+    const handleBooking = () => {
+        if (selectedSeats.length === 0) return
+
+        // Update seats status to booked
+        setSeats(seats.map((seat) => (selectedSeats.some((s) => s.id === seat.id) ? { ...seat, status: "booked" } : seat)))
+
+        // In a real app, we would save this to a database
+        // For this demo, we'll just show a success message
+        alert(`Đặt vé thành công! Bạn đã đặt ${selectedSeats.length} ghế.`)
+        setSelectedSeats([])
+
+        // Redirect to the bookings page
+        router.push("/bookings")
+    }
+
+    return (
+        <div className="container mx-auto py-8">
+            <h1 className="text-3xl font-bold mb-2 text-center">{movie.title}</h1>
+            <p className="text-center mb-8 text-gray-600">
+                {showtime.date} | {showtime.time} | Phòng {showtime.room}
+            </p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-center">Chọn ghế</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex justify-center mb-6">
+                                <div className="flex items-center gap-8">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-6 h-6 bg-gray-200 rounded"></div>
+                                        <span>Ghế trống</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-6 h-6 bg-blue-500 rounded"></div>
+                                        <span>Đang chọn</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-6 h-6 bg-gray-500 rounded"></div>
+                                        <span>Đã đặt</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-center mb-8">
+                                <div className="w-full max-w-2xl bg-gray-100 p-4 rounded-lg">
+                                    <div className="w-full h-8 bg-gray-300 rounded mb-8 flex items-center justify-center text-sm text-gray-700 font-medium">
+                                        MÀN HÌNH
+                                    </div>
+                                    <SeatGrid seats={seats} onSeatClick={handleSeatClick} />
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Thông tin đặt vé</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-4">
+                                <div>
+                                    <h3 className="font-medium">Phim:</h3>
+                                    <p>{movie.title}</p>
+                                </div>
+                                <div>
+                                    <h3 className="font-medium">Suất chiếu:</h3>
+                                    <p>
+                                        {showtime.date} | {showtime.time}
+                                    </p>
+                                </div>
+                                <div>
+                                    <h3 className="font-medium">Phòng:</h3>
+                                    <p>{showtime.room}</p>
+                                </div>
+
+                                <SelectedSeats selectedSeats={selectedSeats} ticketPrice={showtime.price} />
+                            </div>
+                        </CardContent>
+                        <CardFooter className="flex flex-col gap-4">
+                            <Button className="w-full" disabled={selectedSeats.length === 0} onClick={handleBooking}>
+                                Đặt vé
+                            </Button>
+                            <Link href={`/movies/${movie.id}`} className="w-full">
+                                <Button variant="outline" className="w-full">
+                                    <Film className="mr-2 h-4 w-4" />
+                                    Quay lại
+                                </Button>
+                            </Link>
+                        </CardFooter>
+                    </Card>
+                </div>
+            </div>
+        </div>
+    )
+}

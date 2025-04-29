@@ -1,0 +1,228 @@
+import type { Movie, Showtime, Seat, Booking } from "./types"
+
+// Mock data for movies
+export const movies: Movie[] = [
+    {
+        id: 1,
+        title: "Avengers: Endgame",
+        description:
+            "Sau các sự kiện tàn khốc của Avengers: Infinity War, vũ trụ đang trong tình trạng đổ nát. Với sự giúp đỡ của các đồng minh còn lại, các Avengers tập hợp một lần nữa để đảo ngược hành động của Thanos và khôi phục sự cân bằng cho vũ trụ.",
+        posterUrl: "/images/Endgames.jpg",
+        duration: 181,
+        releaseDate: "24/04/2019",
+        genres: ["Hành động", "Phiêu lưu", "Khoa học viễn tưởng"],
+    },
+    {
+        id: 2,
+        title: "Joker",
+        description:
+            "Ở Gotham City năm 1981, một diễn viên hài thất bại tên Arthur Fleck bị xã hội bỏ rơi và bị coi thường. Sau đó, anh ta bắt đầu một cuộc nổi dậy bạo lực, trở thành biểu tượng tội phạm khét tiếng Joker.",
+        posterUrl: "/images/Joker.jpg",
+        duration: 122,
+        releaseDate: "04/10/2019",
+        genres: ["Tội phạm", "Kịch tính", "Kinh dị"],
+    },
+    {
+        id: 3,
+        title: "Parasite",
+        description:
+            "Gia đình Ki-taek thất nghiệp, sống trong một căn hầm bẩn thỉu, cho đến khi con trai của họ bắt đầu dạy kèm cho con gái của gia đình Park giàu có. Dần dần, cả gia đình Ki-taek thâm nhập vào cuộc sống của gia đình Park.",
+        posterUrl: "/images/Parasite.jpg",
+        duration: 132,
+        releaseDate: "30/05/2019",
+        genres: ["Hài kịch", "Kịch tính", "Kinh dị"],
+    },
+    {
+        id: 4,
+        title: "Dune",
+        description:
+            "Một người thừa kế quý tộc được giao nhiệm vụ bảo vệ hành tinh nguy hiểm nhất trong vũ trụ, nguồn cung cấp loại nguyên liệu quý giá nhất, nơi mà chỉ những người có thể chinh phục nỗi sợ hãi của họ mới có thể tồn tại.",
+        posterUrl: "/images/Dune.jpg",
+        duration: 155,
+        releaseDate: "22/10/2021",
+        genres: ["Phiêu lưu", "Khoa học viễn tưởng", "Kịch tính"],
+    },
+    {
+        id: 5,
+        title: "Tenet",
+        description:
+            "Được trang bị chỉ một từ - Tenet - và chiến đấu cho sự sống còn của toàn bộ thế giới, Nhân vật chính hành trình qua một thế giới hoàng hôn của tình báo quốc tế trong một nhiệm vụ sẽ mở ra trong một thứ vượt ra ngoài thời gian thực.",
+        posterUrl: "/images/Tenet.jpeg",
+        duration: 150,
+        releaseDate: "03/09/2020",
+        genres: ["Hành động", "Khoa học viễn tưởng", "Kịch tính"],
+    },
+    {
+        id: 6,
+        title: "The Batman",
+        description:
+            "Khi một kẻ giết người hàng loạt bắt đầu giết các nhân vật chính trị quyền lực ở Gotham, Batman buộc phải điều tra tham nhũng ẩn giấu trong thành phố và đặt câu hỏi về sự liên quan của gia đình anh.",
+        posterUrl: "/images/Batman.jpg",
+        duration: 176,
+        releaseDate: "04/03/2022",
+        genres: ["Hành động", "Tội phạm", "Kịch tính"],
+    },
+]
+
+// Mock data for showtimes
+export const showtimes: Showtime[] = [
+    {
+        id: 1,
+        movieId: 1,
+        date: "29/04/2025",
+        time: "10:00",
+        room: "A1",
+        price: 90000,
+    },
+    {
+        id: 2,
+        movieId: 1,
+        date: "29/04/2025",
+        time: "14:30",
+        room: "A1",
+        price: 100000,
+    },
+    {
+        id: 3,
+        movieId: 1,
+        date: "29/04/2025",
+        time: "19:00",
+        room: "A2",
+        price: 120000,
+    },
+    {
+        id: 4,
+        movieId: 2,
+        date: "29/04/2025",
+        time: "11:15",
+        room: "B1",
+        price: 90000,
+    },
+    {
+        id: 5,
+        movieId: 2,
+        date: "29/04/2025",
+        time: "16:45",
+        room: "B1",
+        price: 100000,
+    },
+    {
+        id: 6,
+        movieId: 3,
+        date: "29/04/2025",
+        time: "13:00",
+        room: "C1",
+        price: 90000,
+    },
+    {
+        id: 7,
+        movieId: 3,
+        date: "29/04/2025",
+        time: "18:30",
+        room: "C1",
+        price: 120000,
+    },
+    {
+        id: 8,
+        movieId: 4,
+        date: "30/04/2025",
+        time: "10:30",
+        room: "A1",
+        price: 90000,
+    },
+    {
+        id: 9,
+        movieId: 5,
+        date: "30/04/2025",
+        time: "15:00",
+        room: "B1",
+        price: 100000,
+    },
+    {
+        id: 10,
+        movieId: 6,
+        date: "30/04/2025",
+        time: "19:30",
+        room: "A2",
+        price: 120000,
+    },
+]
+
+// Mock data for seats
+// We'll generate this dynamically
+const generateSeats = (showtimeId: number): Seat[] => {
+    const seats: Seat[] = []
+    const rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
+    const seatsPerRow = 10
+
+    let id = 1
+
+    rows.forEach((row) => {
+        for (let i = 1; i <= seatsPerRow; i++) {
+            seats.push({
+                id: id++,
+                showtimeId,
+                row,
+                number: i,
+                status: Math.random() < 0.2 ? "booked" : "available", // Randomly mark some seats as booked
+            })
+        }
+    })
+
+    return seats
+}
+
+// Store seats in memory (in a real app, this would be in a database)
+const seatsData: Record<number, Seat[]> = {}
+
+// Initialize seats
+export const getInitialSeats = (showtimeId: number): Seat[] => {
+    // If we already have seats for this showtime, return them
+    if (seatsData[showtimeId]) {
+        return seatsData[showtimeId]
+    }
+
+    // Otherwise, generate new seats
+    const seats = generateSeats(showtimeId)
+    seatsData[showtimeId] = seats
+    return seats
+}
+
+// Mock bookings data
+let bookingsData: Booking[] = [
+    {
+        id: 1,
+        showtimeId: 1,
+        movieTitle: "Avengers: Endgame",
+        date: "29/04/2025",
+        time: "10:00",
+        room: "A1",
+        seats: ["A1", "A2", "A3"],
+        totalPrice: 270000,
+    },
+    {
+        id: 2,
+        showtimeId: 5,
+        movieTitle: "Joker",
+        date: "29/04/2025",
+        time: "16:45",
+        room: "B1",
+        seats: ["D5", "D6"],
+        totalPrice: 200000,
+    },
+]
+
+// Get all bookings
+export const getBookings = (): Booking[] => {
+    return bookingsData
+}
+
+// Cancel a booking
+export const cancelBooking = (bookingId: number): Booking[] => {
+    // Remove the booking
+    bookingsData = bookingsData.filter((booking) => booking.id !== bookingId)
+
+    // In a real app, we would also update the seat status
+    // For this demo, we'll just return the updated bookings
+    return bookingsData
+}
