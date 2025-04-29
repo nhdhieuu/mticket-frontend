@@ -20,7 +20,6 @@ export default function BookingPage({ params }: { params: { id: string } }) {
     const [selectedSeats, setSelectedSeats] = useState<Seat[]>([])
 
     useEffect(() => {
-        // Initialize seats from our data
         setSeats(getInitialSeats(showtimeId))
     }, [showtimeId])
 
@@ -37,7 +36,6 @@ export default function BookingPage({ params }: { params: { id: string } }) {
     const handleSeatClick = (seat: Seat) => {
         if (seat.status === "booked") return
 
-        // Toggle seat selection
         if (seat.status === "selected") {
             setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "available" } : s)))
             setSelectedSeats(selectedSeats.filter((s) => s.id !== seat.id))
@@ -50,15 +48,11 @@ export default function BookingPage({ params }: { params: { id: string } }) {
     const handleBooking = () => {
         if (selectedSeats.length === 0) return
 
-        // Update seats status to booked
         setSeats(seats.map((seat) => (selectedSeats.some((s) => s.id === seat.id) ? { ...seat, status: "booked" } : seat)))
 
-        // In a real app, we would save this to a database
-        // For this demo, we'll just show a success message
         alert(`Đặt vé thành công! Bạn đã đặt ${selectedSeats.length} ghế.`)
         setSelectedSeats([])
 
-        // Redirect to the bookings page
         router.push("/bookings")
     }
 

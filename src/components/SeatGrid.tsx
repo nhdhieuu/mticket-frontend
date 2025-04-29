@@ -8,7 +8,6 @@ interface SeatGridProps {
 }
 
 export function SeatGrid({ seats, onSeatClick }: SeatGridProps) {
-    // Group seats by row
     const rows = seats.reduce(
         (acc, seat) => {
             const row = seat.row
@@ -21,7 +20,6 @@ export function SeatGrid({ seats, onSeatClick }: SeatGridProps) {
         {} as Record<string, Seat[]>,
     )
 
-    // Sort rows alphabetically
     const sortedRows = Object.keys(rows).sort()
 
     return (

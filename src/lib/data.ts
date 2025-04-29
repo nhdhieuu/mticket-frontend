@@ -1,6 +1,5 @@
 import type { Movie, Showtime, Seat, Booking } from "./types"
 
-// Mock data for movies
 export const movies: Movie[] = [
     {
         id: 1,
@@ -64,7 +63,6 @@ export const movies: Movie[] = [
     },
 ]
 
-// Mock data for showtimes
 export const showtimes: Showtime[] = [
     {
         id: 1,
@@ -148,8 +146,6 @@ export const showtimes: Showtime[] = [
     },
 ]
 
-// Mock data for seats
-// We'll generate this dynamically
 const generateSeats = (showtimeId: number): Seat[] => {
     const seats: Seat[] = []
     const rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -164,7 +160,7 @@ const generateSeats = (showtimeId: number): Seat[] => {
                 showtimeId,
                 row,
                 number: i,
-                status: Math.random() < 0.2 ? "booked" : "available", // Randomly mark some seats as booked
+                status: Math.random() < 0.2 ? "booked" : "available",
             })
         }
     })
@@ -172,23 +168,18 @@ const generateSeats = (showtimeId: number): Seat[] => {
     return seats
 }
 
-// Store seats in memory (in a real app, this would be in a database)
 const seatsData: Record<number, Seat[]> = {}
 
-// Initialize seats
 export const getInitialSeats = (showtimeId: number): Seat[] => {
-    // If we already have seats for this showtime, return them
     if (seatsData[showtimeId]) {
         return seatsData[showtimeId]
     }
 
-    // Otherwise, generate new seats
     const seats = generateSeats(showtimeId)
     seatsData[showtimeId] = seats
     return seats
 }
 
-// Mock bookings data
 let bookingsData: Booking[] = [
     {
         id: 1,
@@ -212,17 +203,12 @@ let bookingsData: Booking[] = [
     },
 ]
 
-// Get all bookings
 export const getBookings = (): Booking[] => {
     return bookingsData
 }
 
-// Cancel a booking
 export const cancelBooking = (bookingId: number): Booking[] => {
-    // Remove the booking
     bookingsData = bookingsData.filter((booking) => booking.id !== bookingId)
 
-    // In a real app, we would also update the seat status
-    // For this demo, we'll just return the updated bookings
     return bookingsData
 }

@@ -12,15 +12,11 @@ export default function BookingsPage() {
     const [bookings, setBookings] = useState<Booking[]>([])
 
     useEffect(() => {
-        // In a real app, we would fetch bookings from an API
-        // For this demo, we'll use our mock data
         setBookings(getBookings())
     }, [])
 
     const handleCancelBooking = (bookingId: number) => {
         if (confirm("Bạn có chắc chắn muốn hủy đặt vé này không?")) {
-            // In a real app, we would call an API to cancel the booking
-            // For this demo, we'll just update our mock data
             const updatedBookings = cancelBooking(bookingId)
             setBookings(updatedBookings)
         }
