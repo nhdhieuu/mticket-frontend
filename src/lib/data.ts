@@ -160,7 +160,7 @@ const generateSeats = (showtimeId: number): Seat[] => {
                 showtimeId,
                 row,
                 number: i,
-                status: Math.random() < 0.2 ? "booked" : "available",
+                status: Math.random() < 0.2 ? "BOOKED" : "AVAILABLE",
             })
         }
     })
