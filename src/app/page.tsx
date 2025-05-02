@@ -1,5 +1,4 @@
 import Link from "next/link"
-import {movies} from "@/lib/data"
 import {MovieCard} from "@/components/MovieCard"
 import {getMovieList} from "@/services/movies/movieApi";
 

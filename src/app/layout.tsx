@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
@@ -5,6 +6,7 @@ import "./globals.css"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Film, Ticket, User } from "lucide-react"
+import {returnUser} from "@/services/cookies";
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -13,11 +15,13 @@ export const metadata: Metadata = {
     description: "Hệ thống đặt vé xem phim trực tuyến",
 }
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+export default async function RootLayout({
+                                             children,
+                                         }: Readonly<{
     children: React.ReactNode
 }>) {
+    const user = await returnUser()
+
     return (
         <html lang="vi">
         <body className={inter.className}>
@@ -27,6 +31,7 @@ export default function RootLayout({
                     <Film className="h-6 w-6" />
                     <span>MTicket</span>
                 </Link>
+
                 <nav className="flex items-center gap-4">
                     <Link href="/">
                         <Button variant="ghost">
@@ -40,14 +45,26 @@ export default function RootLayout({
                             Vé đã đặt
                         </Button>
                     </Link>
-                    <Button variant="outline">
-                        <User className="mr-2 h-4 w-4" />
-                        Đăng nhập
-                    </Button>
+
+                    {user?.userName ? (
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">Xin chào, {user.userName}</span>
+                            {/* Bạn có thể thêm dropdown hoặc avatar ở đây */}
+                        </div>
+                    ) : (
+                        <Link href="/login">
+                            <Button variant="outline">
+                                <User className="mr-2 h-4 w-4" />
+                                Đăng nhập
+                            </Button>
+                        </Link>
+                    )}
                 </nav>
             </div>
         </header>
+
         <main className="min-h-screen">{children}</main>
+
         <footer className="border-t py-6 mt-12">
             <div className="container mx-auto text-center text-gray-500">
                 <p>© 2025 MTicket. Hệ thống bán vé rạp chiếu phim.</p>
