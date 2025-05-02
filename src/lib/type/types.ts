@@ -17,7 +17,7 @@ export interface Showtime {
     price: number
 }
 
-export type SeatStatus = "available" | "selected" | "booked"
+export type SeatStatus = "AVAILABLE" | "SELECTED" | "BOOKED"
 
 export interface Seat {
     id: number
