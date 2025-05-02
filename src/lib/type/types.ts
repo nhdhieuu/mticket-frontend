@@ -21,10 +21,32 @@ export type SeatStatus = "AVAILABLE" | "SELECTED" | "BOOKED"
 
 export interface Seat {
     id: number
-    showtimeId: number
+    showtime: {
+        id: number,
+        movie: {
+            id: number,
+            title: string,
+            description: string,
+            releaseDate: string,
+            genre: string,
+            posterUrl: string,
+            duration: number,
+            createdAt: string,
+            updatedAt: string
+        },
+        room: string,
+        price: number,
+        totalSeats: number,
+        date: string,
+        time: string,
+        createdAt: string,
+        updatedAt: string
+    },
     row: string
     number: number
     status: SeatStatus
+    createdAt: string
+    updatedAt: string
 }
 
 export interface Booking {

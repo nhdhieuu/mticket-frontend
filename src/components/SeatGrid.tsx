@@ -34,14 +34,14 @@ export function SeatGrid({ seats, onSeatClick }: SeatGridProps) {
                                 <button
                                     key={seat.id}
                                     className={`w-8 h-8 rounded flex items-center justify-center text-xs font-medium transition-colors ${
-                                        seat.status === "available"
+                                        seat.status === "AVAILABLE"
                                             ? "bg-gray-200 hover:bg-gray-300 cursor-pointer"
-                                            : seat.status === "selected"
+                                            : seat.status === "SELECTED"
                                                 ? "bg-blue-500 text-white cursor-pointer"
                                                 : "bg-gray-500 text-white cursor-not-allowed"
                                     }`}
                                     onClick={() => onSeatClick(seat)}
-                                    disabled={seat.status === "booked"}
+                                    disabled={seat.status === "BOOKED"}
                                 >
                                     {seat.number}
                                 </button>

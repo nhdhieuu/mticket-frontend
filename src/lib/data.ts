@@ -157,14 +157,36 @@ const generateSeats = (showtimeId: number): Seat[] => {
         for (let i = 1; i <= seatsPerRow; i++) {
             seats.push({
                 id: id++,
-                showtimeId,
+                showtime: {
+                    id: 1,
+                    movie: {
+                        id: 2,
+                        title: "Super Mario 2",
+                        description: "Action movie",
+                        releaseDate: "2025-05-01",
+                        genre: "Action",
+                        posterUrl: "https://hehe",
+                        duration: 120,
+                        createdAt: "2025-05-02T11:30:01.16452",
+                        updatedAt: "2025-05-02T11:30:01.16452"
+                    },
+                    room: "Room 2",
+                    price: 140,
+                    totalSeats: 30,
+                    date: "2025-03-04",
+                    time: "15:30",
+                    createdAt: "2025-05-02T11:41:46.418502",
+                    updatedAt: "2025-05-02T11:41:46.418502"
+                },
                 row,
                 number: i,
                 status: Math.random() < 0.2 ? "BOOKED" : "AVAILABLE",
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
             })
         }
     })
-
+    console.log(seats)
     return seats
 }
 
