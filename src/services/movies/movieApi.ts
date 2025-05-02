@@ -1,4 +1,4 @@
-import { ListApiResponse} from "@/lib/type/apiResponse";
+import {ApiResponse, ListApiResponse} from "@/lib/type/apiResponse";
 import axiosInstance from "@/services/axios";
 import {Movie} from "@/lib/type/types";
 
@@ -24,5 +24,16 @@ export const getMovieList = async (): Promise<ListApiResponse<Movie>> => {
     } catch (error) {
         console.error("Error fetching movie list:", error);
         throw new Error("Failed to fetch movie list")
+    }
+}
+export const getMovieById = async (id: number): Promise<ApiResponse<Movie>> => {
+    try {
+        const response = await axiosInstance.get<ApiResponse<Movie>>(
+            `movies/${id}`,
+        )
+        return response.data
+    } catch (error) {
+        console.error("Error fetching movie by ID:", error);
+        throw new Error("Failed to fetch movie by ID")
     }
 }

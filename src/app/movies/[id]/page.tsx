@@ -5,12 +5,13 @@ import {Badge} from "@/components/ui/badge"
 import {Button} from "@/components/ui/button"
 import {Card, CardContent} from "@/components/ui/card"
 import {Calendar, Clock, Film} from "lucide-react"
-import {movies, showtimes} from "@/lib/data"
+import { showtimes} from "@/lib/data"
+import {getMovieById} from "@/services/movies/movieApi";
 
-export default function MoviePage({params}: { params: { id: string } }) {
+export default async function MoviePage({params}: { params: { id: string } }) {
     const movieId = Number.parseInt(params.id)
-    const movie = movies.find((m) => m.id === movieId)
-
+    const repsponse = await getMovieById(movieId)
+    const movie = repsponse.data
     if (!movie) {
         notFound()
     }
@@ -22,7 +23,7 @@ export default function MoviePage({params}: { params: { id: string } }) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="relative aspect-[2/3] w-full max-w-[300px] mx-auto md:mx-0">
                     <Image
-                        src={movie.posterUrl || "/placeholder.svg"}
+                        src={movie.posterUrl || "https://placehold.co/600x400?text=mticket"}
                         alt={movie.title}
                         fill
                         className="object-cover rounded-lg"
