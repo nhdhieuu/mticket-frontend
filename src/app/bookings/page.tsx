@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Film, Trash2 } from "lucide-react"
 import { getBookings, cancelBooking } from "@/lib/data"
-import type { Booking } from "@/lib/types"
+import type { Booking } from "@/lib/type/types"
 
 export default function BookingsPage() {
     const [bookings, setBookings] = useState<Booking[]>([])

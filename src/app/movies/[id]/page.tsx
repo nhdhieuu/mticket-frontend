@@ -10,7 +10,7 @@ import { movies, showtimes } from "@/lib/data"
 export default function MoviePage({ params }: { params: { id: string } }) {
     const movieId = Number.parseInt(params.id)
     const movie = movies.find((m) => m.id === movieId)
-
+    
     if (!movie) {
         notFound()
     }

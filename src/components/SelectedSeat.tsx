@@ -1,4 +1,4 @@
-import type { Seat } from "@/lib/types"
+import type { Seat } from "@/lib/type/types"
 
 interface SelectedSeatsProps {
     selectedSeats: Seat[]

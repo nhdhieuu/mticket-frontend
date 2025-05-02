@@ -1,4 +1,4 @@
-import type { Movie, Showtime, Seat, Booking } from "./types"
+import type { Movie, Showtime, Seat, Booking } from "./type/types"
 
 export const movies: Movie[] = [
     {

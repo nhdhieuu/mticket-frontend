@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { showtimes, movies, getInitialSeats } from "@/lib/data"
-import type { Seat } from "@/lib/types"
+import type { Seat } from "@/lib/type/types"
 import { Film } from "lucide-react"
 import {SeatGrid} from "@/components/SeatGrid";
 import {SelectedSeats} from "@/components/SelectedSeat";

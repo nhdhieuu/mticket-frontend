@@ -2,7 +2,7 @@ import Image from "next/image"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Clock, Calendar } from "lucide-react"
-import type { Movie } from "@/lib/types"
+import type { Movie } from "@/lib/type/types"
 
 interface MovieCardProps {
     movie: Movie
