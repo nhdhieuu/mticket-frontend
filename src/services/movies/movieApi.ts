@@ -1,5 +1,6 @@
 import { ListApiResponse} from "@/lib/type/apiResponse";
 import axiosInstance from "@/services/axios";
+import {Movie} from "@/lib/type/types";
 
 interface MovieApiResponse {
     id: number
@@ -13,9 +14,9 @@ interface MovieApiResponse {
     updatedAt: string
 }
 
-export const getMovieList = async (): Promise<ListApiResponse<MovieApiResponse[]>> => {
+export const getMovieList = async (): Promise<ListApiResponse<Movie>> => {
     try {
-        const response = await axiosInstance.get<ListApiResponse<MovieApiResponse[]>>(
+        const response = await axiosInstance.get<ListApiResponse<Movie>>(
             "movies",
         )
         console.log("response", response)

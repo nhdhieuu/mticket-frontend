@@ -5,7 +5,9 @@ export interface Movie {
     posterUrl: string
     duration: number
     releaseDate: string
-    genres: string[]
+    genres: string
+    createdAt: string
+    updatedAt: string
 }
 
 export interface Showtime {

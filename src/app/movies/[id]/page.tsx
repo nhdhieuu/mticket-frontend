@@ -1,16 +1,16 @@
 import Link from "next/link"
 import Image from "next/image"
-import { notFound } from "next/navigation"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Calendar, Clock, Film } from "lucide-react"
-import { movies, showtimes } from "@/lib/data"
+import {notFound} from "next/navigation"
+import {Badge} from "@/components/ui/badge"
+import {Button} from "@/components/ui/button"
+import {Card, CardContent} from "@/components/ui/card"
+import {Calendar, Clock, Film} from "lucide-react"
+import {movies, showtimes} from "@/lib/data"
 
-export default function MoviePage({ params }: { params: { id: string } }) {
+export default function MoviePage({params}: { params: { id: string } }) {
     const movieId = Number.parseInt(params.id)
     const movie = movies.find((m) => m.id === movieId)
-    
+
     if (!movie) {
         notFound()
     }
@@ -32,19 +32,17 @@ export default function MoviePage({ params }: { params: { id: string } }) {
                 <div className="md:col-span-2">
                     <h1 className="text-3xl font-bold mb-4">{movie.title}</h1>
                     <div className="flex flex-wrap gap-2 mb-4">
-                        {movie.genres.map((genre) => (
-                            <Badge key={genre} variant="secondary">
-                                {genre}
-                            </Badge>
-                        ))}
+                        <Badge variant="secondary">
+                            {movie.genres}
+                        </Badge>
                     </div>
                     <div className="flex items-center gap-6 mb-4 text-gray-600">
                         <div className="flex items-center gap-2">
-                            <Clock className="h-4 w-4" />
+                            <Clock className="h-4 w-4"/>
                             <span>{movie.duration} phút</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4" />
+                            <Calendar className="h-4 w-4"/>
                             <span>Khởi chiếu: {movie.releaseDate}</span>
                         </div>
                     </div>
@@ -76,7 +74,7 @@ export default function MoviePage({ params }: { params: { id: string } }) {
             <div className="mt-8">
                 <Link href="/">
                     <Button variant="outline">
-                        <Film className="mr-2 h-4 w-4" />
+                        <Film className="mr-2 h-4 w-4"/>
                         Quay lại danh sách phim
                     </Button>
                 </Link>

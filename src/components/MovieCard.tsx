@@ -18,11 +18,9 @@ export function MovieCard({ movie }: MovieCardProps) {
                 <h2 className="text-xl font-bold mb-2">{movie.title}</h2>
                 <p className="text-sm text-gray-500 mb-3 line-clamp-2">{movie.description}</p>
                 <div className="flex flex-wrap gap-2 mb-3">
-                    {movie.genres.map((genre) => (
-                        <Badge key={genre} variant="secondary">
-                            {genre}
+                        <Badge variant="secondary">
+                            {movie.genres}
                         </Badge>
-                    ))}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                     <Clock className="h-4 w-4" />

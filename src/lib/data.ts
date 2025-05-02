@@ -9,7 +9,9 @@ export const movies: Movie[] = [
         posterUrl: "/images/Endgames.jpg",
         duration: 181,
         releaseDate: "24/04/2019",
-        genres: ["Hành động", "Phiêu lưu", "Khoa học viễn tưởng"],
+        genres: "Hành động",
+        createdAt: "2025-05-02T11:30:01.16452",
+        updatedAt: "2025-05-02T11:30:01.16452",
     },
     {
         id: 2,
@@ -19,7 +21,9 @@ export const movies: Movie[] = [
         posterUrl: "/images/Joker.jpg",
         duration: 122,
         releaseDate: "04/10/2019",
-        genres: ["Tội phạm", "Kịch tính", "Kinh dị"],
+        genres: "Hành động",
+        createdAt: "2025-05-02T11:30:01.16452",
+        updatedAt: "2025-05-02T11:30:01.16452",
     },
     {
         id: 3,
@@ -29,7 +33,9 @@ export const movies: Movie[] = [
         posterUrl: "/images/Parasite.jpg",
         duration: 132,
         releaseDate: "30/05/2019",
-        genres: ["Hài kịch", "Kịch tính", "Kinh dị"],
+        genres: "Hành động",
+        createdAt: "2025-05-02T11:30:01.16452",
+        updatedAt: "2025-05-02T11:30:01.16452",
     },
     {
         id: 4,
@@ -39,7 +45,9 @@ export const movies: Movie[] = [
         posterUrl: "/images/Dune.jpg",
         duration: 155,
         releaseDate: "22/10/2021",
-        genres: ["Phiêu lưu", "Khoa học viễn tưởng", "Kịch tính"],
+        genres: "Hành động",
+        createdAt: "2025-05-02T11:30:01.16452",
+        updatedAt: "2025-05-02T11:30:01.16452",
     },
     {
         id: 5,
@@ -49,7 +57,9 @@ export const movies: Movie[] = [
         posterUrl: "/images/Tenet.jpeg",
         duration: 150,
         releaseDate: "03/09/2020",
-        genres: ["Hành động", "Khoa học viễn tưởng", "Kịch tính"],
+        genres: "Hành động",
+        createdAt: "2025-05-02T11:30:01.16452",
+        updatedAt: "2025-05-02T11:30:01.16452",
     },
     {
         id: 6,
@@ -59,7 +69,9 @@ export const movies: Movie[] = [
         posterUrl: "/images/Batman.jpg",
         duration: 176,
         releaseDate: "04/03/2022",
-        genres: ["Hành động", "Tội phạm", "Kịch tính"],
+        genres: "Hành động",
+        createdAt: "2025-05-02T11:30:01.16452",
+        updatedAt: "2025-05-02T11:30:01.16452",
     },
 ]
 
