@@ -1,67 +1,98 @@
 "use client"
 
-import {useState, useEffect, use} from "react"
+import {useState, use, useEffect} from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { showtimes, movies, getInitialSeats } from "@/lib/data"
+import { showtimes, movies } from "@/lib/data"
 import type { Seat } from "@/lib/type/types"
 import { Film } from "lucide-react"
 import {SeatGrid} from "@/components/SeatGrid";
 import {SelectedSeats} from "@/components/SelectedSeat";
+import {BookingSeatBody, bookingSeats, getSeats} from "@/services/booking/bookingApi";
+import LoadingComponent from "@/components/loading";
 
 export default function BookingPage({ params }: { params: Promise<{ id: string }> }) {
     const unwrappedParams = use(params)
     const router = useRouter()
     const showtimeId = Number.parseInt(unwrappedParams.id)
     const showtime = showtimes.find((s) => s.id === showtimeId)
-
+    const [loading, setLoading] = useState(true)
     const [seats, setSeats] = useState<Seat[]>([])
     const [selectedSeats, setSelectedSeats] = useState<Seat[]>([])
-
+    const fetchSeatData = async () => {
+        try {
+            const response = await getSeats(showtimeId.toString())
+            const data = response.data
+            console.log("Fetched seat data:", data)
+            setSeats(data)
+            setLoading(false)
+        } catch (error) {
+            console.error("Error fetching seat data:", error)
+            setLoading(false)
+        }
+    }
     useEffect(() => {
-        setSeats(getInitialSeats(showtimeId))
+        fetchSeatData()
     }, [showtimeId])
 
+
+    if(loading) return <LoadingComponent/>
     if (!showtime) {
         return <div className="container mx-auto py-8">Không tìm thấy suất chiếu</div>
     }
 
-    const movie = movies.find((m) => m.id === showtime.movieId)
+    const movie = movies.find((m) => m.id === showtime.movie.id)
 
     if (!movie) {
         return <div className="container mx-auto py-8">Không tìm thấy phim</div>
     }
 
     const handleSeatClick = (seat: Seat) => {
-        if (seat.status === "booked") return
+        if (seat.status === "SELECTED") return
 
-        if (seat.status === "selected") {
-            setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "available" } : s)))
+        if (seat.status === "SELECTING") {
+            setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "AVAILABLE" } : s)))
             setSelectedSeats(selectedSeats.filter((s) => s.id !== seat.id))
         } else {
-            setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "selected" } : s)))
+            setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "SELECTING" } : s)))
             setSelectedSeats([...selectedSeats, seat])
         }
+        console.log("Selected seats:", selectedSeats)
     }
 
-    const handleBooking = () => {
+    const handleBooking = async () => {
         if (selectedSeats.length === 0) return
-
-        setSeats(seats.map((seat) => (selectedSeats.some((s) => s.id === seat.id) ? { ...seat, status: "booked" } : seat)))
+        const bookingBody : BookingSeatBody= {
+            seatIds : selectedSeats.map(seat => seat.id),
+            showTimeId: showtimeId,
+        }
+        console.log("Booking body:", bookingBody)
+        try {
+            const response = await bookingSeats(bookingBody)
+            const data = response.data
+            console.log("Booking response:", data)
+            alert(`Đặt vé thành công! Bạn đã đặt ${selectedSeats.length} ghế.`)
+            setSelectedSeats([])
+            router.push("/bookings")
+        }
+        catch (error) {
+            console.error("Error booking seats:", error)
+            alert("Đặt vé thất bại. Vui lòng thử lại sau.")
+        }
+        /*  setSeats(seats.map((seat) => (selectedSeats.some((s) => s.id === seat.id) ? { ...seat, status: "BOOKED" } : seat)))
 
         alert(`Đặt vé thành công! Bạn đã đặt ${selectedSeats.length} ghế.`)
         setSelectedSeats([])
-
-        router.push("/bookings")
+        router.push("/bookings")*/
     }
 
     return (
         <div className="container mx-auto py-8">
-            <h1 className="text-3xl font-bold mb-2 text-center">{movie.title}</h1>
+            <h1 className="text-3xl font-bold mb-2 text-center">{seats[0].showtime.movie.title}</h1>
             <p className="text-center mb-8 text-gray-600">
-                {showtime.date} | {showtime.time} | Phòng {showtime.room}
+                {seats[0].showtime.date} | {seats[0].showtime.time} | Phòng {seats[0].showtime.room}
             </p>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -109,17 +140,17 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                             <div className="space-y-4">
                                 <div>
                                     <h3 className="font-medium">Phim:</h3>
-                                    <p>{movie.title}</p>
+                                    <p>{seats[0].showtime.movie.title}</p>
                                 </div>
                                 <div>
                                     <h3 className="font-medium">Suất chiếu:</h3>
                                     <p>
-                                        {showtime.date} | {showtime.time}
+                                        {seats[0].showtime.date} | {seats[0].showtime.time}
                                     </p>
                                 </div>
                                 <div>
                                     <h3 className="font-medium">Phòng:</h3>
-                                    <p>{showtime.room}</p>
+                                    <p>{seats[0].showtime.room}</p>
                                 </div>
 
                                 <SelectedSeats selectedSeats={selectedSeats} ticketPrice={showtime.price} />

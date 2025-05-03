@@ -1,4 +1,4 @@
-import {SeatStatus} from "@/lib/type/types";
+import {Seat, SeatStatus} from "@/lib/type/types";
 import {ListApiResponse} from "@/lib/type/apiResponse";
 
 interface ShowtimeSeatResponse {
@@ -31,7 +31,7 @@ interface ShowtimeSeatResponse {
     updatedAt: string,
 }
 
-const seatResponse : ListApiResponse<ShowtimeSeatResponse> = {
+export const seatResponse : ListApiResponse<Seat> = {
     data: [
         {
             id: 1,

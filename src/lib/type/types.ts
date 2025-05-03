@@ -5,26 +5,53 @@ export interface Movie {
     posterUrl: string
     duration: number
     releaseDate: string
-    genres: string[]
+    genre: string
+    createdAt: string
+    updatedAt: string
 }
 
 export interface Showtime {
     id: number
-    movieId: number
+    movie: Movie
     date: string
     time: string
     room: string
     price: number
+    createdAt: string
+    updatedAt: string
+
 }
 
-export type SeatStatus = "AVAILABLE" | "SELECTED" | "BOOKED"
+export type SeatStatus = "AVAILABLE" | "SELECTING" | "SELECTED" | "BOOKED"
 
 export interface Seat {
     id: number
-    showtimeId: number
+    showtime: {
+        id: number,
+        movie: {
+            id: number,
+            title: string,
+            description: string,
+            releaseDate: string,
+            genre: string,
+            posterUrl: string,
+            duration: number,
+            createdAt: string,
+            updatedAt: string
+        },
+        room: string,
+        price: number,
+        totalSeats: number,
+        date: string,
+        time: string,
+        createdAt: string,
+        updatedAt: string
+    },
     row: string
     number: number
     status: SeatStatus
+    createdAt: string
+    updatedAt: string
 }
 
 export interface Booking {

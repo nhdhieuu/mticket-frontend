@@ -6,22 +6,58 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Film, Trash2 } from "lucide-react"
 import { getBookings, cancelBooking } from "@/lib/data"
-import type { Booking } from "@/lib/type/types"
+import type {Booking, Seat} from "@/lib/type/types"
+import {BookedSeatResponse, cancelBookedSeat, getBookedSeat} from "@/services/booking/bookingApi";
+import LoadingComponent from "@/components/loading";
+const convertToBookings = (data: BookedSeatResponse[]): Booking[] => {
+    return data.map((item): Booking => ({
+        id: item.id,
+        showtimeId: item.showtime.id,
+        movieTitle: item.showtime.movie.title,
+        date: item.showtime.date,
+        time: item.showtime.time,
+        room: item.showtime.room,
+        seats: item.seats.map((seat: Seat) => `${seat.row}${seat.number}`),
+        totalPrice: item.totalPrice
+    }))
+}
 
 export default function BookingsPage() {
     const [bookings, setBookings] = useState<Booking[]>([])
-
-    useEffect(() => {
-        setBookings(getBookings())
-    }, [])
-
-    const handleCancelBooking = (bookingId: number) => {
-        if (confirm("Bạn có chắc chắn muốn hủy đặt vé này không?")) {
-            const updatedBookings = cancelBooking(bookingId)
-            setBookings(updatedBookings)
+    const [loading, setLoading] = useState(true)
+    const fetchData = async () => {
+        try {
+            const response = await getBookedSeat();
+            const simplifiedBookings: Booking[] = convertToBookings(response.data)
+            console.log("simplifiedBookings", simplifiedBookings)
+            setBookings(simplifiedBookings)
+            setLoading(false)
+        }
+        catch (e){
+            console.log("Error fetching bookings:", e)
+            setLoading(false)
         }
     }
+    useEffect(() => {
+        fetchData()
+    }, [])
 
+    const handleCancelBooking = async (bookingId: number) => {
+        if (confirm("Bạn có chắc chắn muốn hủy đặt vé này không?")) {
+            try {
+                const response = await cancelBookedSeat(bookingId);
+                console.log("Booking canceled:", response)
+                alert("Hủy đặt vé thành công!")
+                window.location.reload()
+            }
+            catch(e){
+                console.log("Error canceling booking:", e)
+            }
+        }
+    }
+    if (loading){
+        return <LoadingComponent/>
+    }
     return (
         <div className="container mx-auto py-8">
             <h1 className="text-3xl font-bold mb-8 text-center">Vé đã đặt</h1>
