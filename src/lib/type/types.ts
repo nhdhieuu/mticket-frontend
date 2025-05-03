@@ -22,7 +22,7 @@ export interface Showtime {
 
 }
 
-export type SeatStatus = "AVAILABLE" | "SELECTED" | "BOOKED"
+export type SeatStatus = "AVAILABLE" | "SELECTING" | "SELECTED" | "BOOKED"
 
 export interface Seat {
     id: number

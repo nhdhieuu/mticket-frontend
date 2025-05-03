@@ -23,6 +23,8 @@ export default function LoginForm() {
         try {
             const response = await login({username, password})
             await setUserData(response.data)
+            window.location.href = "/"
+
         }
         catch (e){
             console.error("Đăng nhập thất bại:", e)

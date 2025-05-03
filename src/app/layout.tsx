@@ -5,8 +5,10 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Film, Ticket, User } from "lucide-react"
+import {ChevronDown, Film, Ticket, User} from "lucide-react"
 import {returnUser} from "@/services/cookies";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu"
+import LogoutButton from "@/components/LogoutButton";
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -47,10 +49,20 @@ export default async function RootLayout({
                     </Link>
 
                     {user?.userName ? (
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-600">Xin chào, {user.userName}</span>
-                            {/* Bạn có thể thêm dropdown hoặc avatar ở đây */}
-                        </div>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="flex items-center gap-2">
+                                    <User className="h-4 w-4" />
+                                    <span>{user.userName}</span>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem asChild>
+                                    <LogoutButton />
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     ) : (
                         <Link href="/login">
                             <Button variant="outline">

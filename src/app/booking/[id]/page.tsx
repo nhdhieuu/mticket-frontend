@@ -10,7 +10,7 @@ import type { Seat } from "@/lib/type/types"
 import { Film } from "lucide-react"
 import {SeatGrid} from "@/components/SeatGrid";
 import {SelectedSeats} from "@/components/SelectedSeat";
-import {getSeats} from "@/services/booking/bookingApi";
+import {BookingSeatBody, bookingSeats, getSeats} from "@/services/booking/bookingApi";
 import LoadingComponent from "@/components/loading";
 
 export default function BookingPage({ params }: { params: Promise<{ id: string }> }) {
@@ -50,25 +50,37 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
     }
 
     const handleSeatClick = (seat: Seat) => {
-        if (seat.status === "BOOKED") return
+        if (seat.status === "SELECTED") return
 
-        if (seat.status === "SELECTED") {
+        if (seat.status === "SELECTING") {
             setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "AVAILABLE" } : s)))
             setSelectedSeats(selectedSeats.filter((s) => s.id !== seat.id))
         } else {
-            setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "SELECTED" } : s)))
+            setSeats(seats.map((s) => (s.id === seat.id ? { ...s, status: "SELECTING" } : s)))
             setSelectedSeats([...selectedSeats, seat])
         }
         console.log("Selected seats:", selectedSeats)
     }
 
-    const handleBooking = () => {
+    const handleBooking = async () => {
         if (selectedSeats.length === 0) return
-        const bookingBody ={
+        const bookingBody : BookingSeatBody= {
             seatIds : selectedSeats.map(seat => seat.id),
-            showtimeId: showtimeId,
+            showTimeId: showtimeId,
         }
         console.log("Booking body:", bookingBody)
+        try {
+            const response = await bookingSeats(bookingBody)
+            const data = response.data
+            console.log("Booking response:", data)
+            alert(`Đặt vé thành công! Bạn đã đặt ${selectedSeats.length} ghế.`)
+            setSelectedSeats([])
+            router.push("/bookings")
+        }
+        catch (error) {
+            console.error("Error booking seats:", error)
+            alert("Đặt vé thất bại. Vui lòng thử lại sau.")
+        }
         /*  setSeats(seats.map((seat) => (selectedSeats.some((s) => s.id === seat.id) ? { ...seat, status: "BOOKED" } : seat)))
 
         alert(`Đặt vé thành công! Bạn đã đặt ${selectedSeats.length} ghế.`)
