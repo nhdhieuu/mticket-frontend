@@ -74,7 +74,7 @@ export interface BookedSeatResponse {
     updatedAt: string;
 }
 
-export const getBookedSeat = async () : Promise<ListApiResponse<BookedSeatResponse>> => {
+export const getBookedSeat = async (): Promise<ListApiResponse<BookedSeatResponse>> => {
     try {
         const response = await axiosInstance.get<ListApiResponse<BookedSeatResponse>>(
             `bookings/me`,
@@ -83,5 +83,23 @@ export const getBookedSeat = async () : Promise<ListApiResponse<BookedSeatRespon
     } catch (error) {
         console.error("Error fetching booked seats:", error);
         throw new Error("Failed to fetch booked seats")
+    }
+}
+
+interface CancelBookingResponse {
+    data: string | null;
+    message: string;
+    status: number;
+}
+
+export const cancelBookedSeat = async (bookingId: number): Promise<CancelBookingResponse> => {
+    try {
+        const response = await axiosInstance.post<CancelBookingResponse>(
+            `bookings/cancel?bookingId=${bookingId}`,
+        )
+        return response.data
+    } catch (error) {
+        console.error("Error canceling booked seats:", error);
+        throw new Error("Failed to cancel booked seats")
     }
 }

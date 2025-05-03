@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Film, Trash2 } from "lucide-react"
 import { getBookings, cancelBooking } from "@/lib/data"
 import type {Booking, Seat} from "@/lib/type/types"
-import {BookedSeatResponse, getBookedSeat} from "@/services/booking/bookingApi";
+import {BookedSeatResponse, cancelBookedSeat, getBookedSeat} from "@/services/booking/bookingApi";
 import LoadingComponent from "@/components/loading";
 const convertToBookings = (data: BookedSeatResponse[]): Booking[] => {
     return data.map((item): Booking => ({
@@ -42,10 +42,17 @@ export default function BookingsPage() {
         fetchData()
     }, [])
 
-    const handleCancelBooking = (bookingId: number) => {
+    const handleCancelBooking = async (bookingId: number) => {
         if (confirm("Bạn có chắc chắn muốn hủy đặt vé này không?")) {
-            const updatedBookings = cancelBooking(bookingId)
-            setBookings(updatedBookings)
+            try {
+                const response = await cancelBookedSeat(bookingId);
+                console.log("Booking canceled:", response)
+                alert("Hủy đặt vé thành công!")
+                window.location.reload()
+            }
+            catch(e){
+                console.log("Error canceling booking:", e)
+            }
         }
     }
     if (loading){
