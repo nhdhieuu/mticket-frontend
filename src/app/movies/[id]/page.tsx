@@ -5,8 +5,7 @@ import {Badge} from "@/components/ui/badge"
 import {Button} from "@/components/ui/button"
 import {Card, CardContent} from "@/components/ui/card"
 import {Calendar, Clock, Film} from "lucide-react"
-import { showtimes} from "@/lib/data"
-import {getMovieById} from "@/services/movies/movieApi";
+import {getMovieById, getMovieShowtimes} from "@/services/movies/movieApi";
 
 export default async function MoviePage({params}: { params: { id: string } }) {
     const movieId = Number.parseInt(params.id)
@@ -16,7 +15,9 @@ export default async function MoviePage({params}: { params: { id: string } }) {
         notFound()
     }
 
-    const movieShowtimes = showtimes.filter((s) => s.movieId === movieId)
+    const movieShowtimesResponse = await getMovieShowtimes(movieId)
+    console.log("movieShowtimesResponse", movieShowtimesResponse.data)
+    const movieShowtimes = movieShowtimesResponse.data
 
     return (
         <div className="container mx-auto py-8">
@@ -34,7 +35,7 @@ export default async function MoviePage({params}: { params: { id: string } }) {
                     <h1 className="text-3xl font-bold mb-4">{movie.title}</h1>
                     <div className="flex flex-wrap gap-2 mb-4">
                         <Badge variant="secondary">
-                            {movie.genres}
+                            {movie.genre}
                         </Badge>
                     </div>
                     <div className="flex items-center gap-6 mb-4 text-gray-600">
@@ -50,26 +51,30 @@ export default async function MoviePage({params}: { params: { id: string } }) {
                     <p className="mb-6">{movie.description}</p>
 
                     <h2 className="text-xl font-bold mb-4">Suất chiếu</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                        {movieShowtimes.map((showtime) => (
-                            <Card key={showtime.id} className="border border-gray-200">
-                                <CardContent className="p-4">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <div className="font-semibold">{showtime.date}</div>
-                                        <Badge>{showtime.time}</Badge>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <div className="text-sm text-gray-500">
-                                            <span className="font-medium">Phòng:</span> {showtime.room}
+                    {movieShowtimes && movieShowtimes.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                            {movieShowtimes.map((showtime) => (
+                                <Card key={showtime.id} className="border border-gray-200">
+                                    <CardContent className="p-4">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <div className="font-semibold">{showtime.date}</div>
+                                            <Badge>{showtime.time}</Badge>
                                         </div>
-                                        <Link href={`/booking/${showtime.id}`}>
-                                            <Button size="sm">Đặt vé</Button>
-                                        </Link>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
+                                        <div className="flex justify-between items-center">
+                                            <div className="text-sm text-gray-500">
+                                                <span className="font-medium">Phòng:</span> {showtime.room}
+                                            </div>
+                                            <Link href={`/booking/${showtime.id}`}>
+                                                <Button size="sm">Đặt vé</Button>
+                                            </Link>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-gray-500 mb-6">Hiện chưa có suất chiếu nào cho phim này.</p>
+                    )}
                 </div>
             </div>
             <div className="mt-8">

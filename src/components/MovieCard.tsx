@@ -19,7 +19,7 @@ export function MovieCard({ movie }: MovieCardProps) {
                 <p className="text-sm text-gray-500 mb-3 line-clamp-2">{movie.description}</p>
                 <div className="flex flex-wrap gap-2 mb-3">
                         <Badge variant="secondary">
-                            {movie.genres}
+                            {movie.genre}
                         </Badge>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500">

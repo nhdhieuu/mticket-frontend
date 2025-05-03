@@ -1,6 +1,6 @@
 "use client"
 
-import {useState, useEffect, use} from "react"
+import {useState, use, useEffect} from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -10,26 +10,40 @@ import type { Seat } from "@/lib/type/types"
 import { Film } from "lucide-react"
 import {SeatGrid} from "@/components/SeatGrid";
 import {SelectedSeats} from "@/components/SelectedSeat";
-import {seatResponse} from "@/lib/seatMockData";
+import {getSeats} from "@/services/booking/bookingApi";
+import LoadingComponent from "@/components/loading";
 
 export default function BookingPage({ params }: { params: Promise<{ id: string }> }) {
     const unwrappedParams = use(params)
     const router = useRouter()
     const showtimeId = Number.parseInt(unwrappedParams.id)
     const showtime = showtimes.find((s) => s.id === showtimeId)
-
-    const [seats, setSeats] = useState<Seat[]>(seatResponse.data)
+    const [loading, setLoading] = useState(true)
+    const [seats, setSeats] = useState<Seat[]>([])
     const [selectedSeats, setSelectedSeats] = useState<Seat[]>([])
+    const fetchSeatData = async () => {
+        try {
+            const response = await getSeats(showtimeId.toString())
+            const data = response.data
+            console.log("Fetched seat data:", data)
+            setSeats(data)
+            setLoading(false)
+        } catch (error) {
+            console.error("Error fetching seat data:", error)
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        fetchSeatData()
+    }, [showtimeId])
 
-   /* useEffect(() => {
-        setSeats(seatResponse.data)
-    }, [showtimeId])*/
 
+    if(loading) return <LoadingComponent/>
     if (!showtime) {
         return <div className="container mx-auto py-8">Không tìm thấy suất chiếu</div>
     }
 
-    const movie = movies.find((m) => m.id === showtime.movieId)
+    const movie = movies.find((m) => m.id === showtime.movie.id)
 
     if (!movie) {
         return <div className="container mx-auto py-8">Không tìm thấy phim</div>
