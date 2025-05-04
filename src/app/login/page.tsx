@@ -23,11 +23,13 @@ export default function LoginForm() {
         try {
             const response = await login({username, password})
             await setUserData(response.data)
+            alert("Đăng nhập thành công")
             window.location.href = "/"
 
         }
         catch (e){
             console.error("Đăng nhập thất bại:", e)
+            alert("Đăng nhập thất bại")
         }
     }
 
@@ -91,13 +93,13 @@ export default function LoginForm() {
                             </Label>
                         </div>
                     </CardContent>
-                    <CardFooter className="flex flex-col gap-4">
+                    <CardFooter className="flex flex-col gap-4 mt-3">
                         <Button type="submit" className="w-full">
                             Đăng nhập
                         </Button>
                         <p className="text-center text-sm text-gray-600">
                             Chưa có tài khoản?{" "}
-                            <a href="#" className="text-primary font-medium hover:underline">
+                            <a href="/signup" className="text-primary font-medium hover:underline">
                                 Đăng ký
                             </a>
                         </p>
