@@ -73,7 +73,16 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
             const response = await bookingSeats(bookingBody)
             const data = response.data
             console.log("Booking response:", data)
-            alert(`Đặt vé thành công! Bạn đã đặt ${selectedSeats.length} ghế.`)
+            if (response.data == null) {
+                alert("Đặt vé thất bại. Vui lòng thử lại sau.")
+                return
+            }
+            if (data.failedSeats.length == 0 ) {
+                alert(`Đặt vé thành công! Bạn đã đặt ${data.successfulSeats.length} ghế.`)
+            }
+            if (data.failedSeats.length > 0 && data.successfulSeats.length > 0) {
+                alert(`Đặt vé thành công! Bạn đã đặt ${data.successfulSeats.length} ghế. Tuy nhiên, một số ghế không còn khả dụng: ${data.failedSeats.map(seat => seat.seatNumber).join(", ")}`)
+            }
             setSelectedSeats([])
             router.push("/bookings")
         }
