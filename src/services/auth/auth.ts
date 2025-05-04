@@ -15,3 +15,13 @@ export const login = async (data: IAuth) => {
         throw new Error("Failed to login");
     }
 }
+
+export const register = async (data: IAuth) => {
+    try {
+        const response = await axiosInstance.post<ApiResponse<AuthResponse>>("auth/user/register", data);
+        return response.data;
+    } catch (error) {
+        console.error("Error registering:", error);
+        throw new Error("Failed to register");
+    }
+}
