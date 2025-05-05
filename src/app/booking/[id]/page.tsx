@@ -17,7 +17,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
     const unwrappedParams = use(params)
     const router = useRouter()
     const showtimeId = Number.parseInt(unwrappedParams.id)
-    const showtime = showtimes.find((s) => s.id === showtimeId)
+  /*  const showtime = showtimes.find((s) => s.id === showtimeId)*/
     const [loading, setLoading] = useState(true)
     const [seats, setSeats] = useState<Seat[]>([])
     const [selectedSeats, setSelectedSeats] = useState<Seat[]>([])
@@ -39,15 +39,15 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
 
 
     if(loading) return <LoadingComponent/>
-    if (!showtime) {
+    /*if (!showtime) {
         return <div className="container mx-auto py-8">Không tìm thấy suất chiếu</div>
-    }
+    }*/
 
-    const movie = movies.find((m) => m.id === showtime.movie.id)
+    /*const movie = movies.find((m) => m.id === showtime.movie.id)
 
     if (!movie) {
         return <div className="container mx-auto py-8">Không tìm thấy phim</div>
-    }
+    }*/
 
     const handleSeatClick = (seat: Seat) => {
         if (seat.status === "SELECTED") return
@@ -162,14 +162,14 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                                     <p>{seats[0].showtime.room}</p>
                                 </div>
 
-                                <SelectedSeats selectedSeats={selectedSeats} ticketPrice={showtime.price} />
+                                <SelectedSeats selectedSeats={selectedSeats} ticketPrice={seats[0].showtime.price} />
                             </div>
                         </CardContent>
                         <CardFooter className="flex flex-col gap-4">
                             <Button className="w-full" disabled={selectedSeats.length === 0} onClick={handleBooking}>
                                 Đặt vé
                             </Button>
-                            <Link href={`/movies/${movie.id}`} className="w-full">
+                            <Link href={`/movies/${seats[0].showtime.movie.id}`} className="w-full">
                                 <Button variant="outline" className="w-full">
                                     <Film className="mr-2 h-4 w-4" />
                                     Quay lại
